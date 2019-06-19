@@ -1,7 +1,6 @@
 import os
 import exifread
 
-
 def send_to_trashbin(filename, cur_path):
     
     
@@ -14,11 +13,18 @@ def send_to_trashbin(filename, cur_path):
         os.remove(cur_path)
 
 
-ss_cnt, movie_cnt, db_cnt = 0, 0, 0
+no_date, ss_cnt, movie_cnt, db_cnt = 0, 0, 0, 0
 
 for root, dirs, files in os.walk(r'\\HUSSEY_NAS\Hussey Share\Pictures'):
     for name in files:
         path = os.path.join(root, name)
+        with open(path, 'rb') as f:
+            tags = exifread.process_file(f, details=False)
+            try:
+                print(f'{name} take at {tags["EXIF DateTimeOriginal"]}')
+            except KeyError:
+                no_date += 1
+                print(f'*******{name} has no DateTimeOriginal')
         name = name.upper()
 
         if '.AAE' in name :
@@ -49,3 +55,4 @@ for root, dirs, files in os.walk(r'\\HUSSEY_NAS\Hussey Share\Pictures'):
 
 
 print(f'Total movies found {movie_cnt}\nTotal thumbnails found {db_cnt}\nTotal screenshots found {ss_cnt}')
+print(f'{no_date} files had no date taken')
