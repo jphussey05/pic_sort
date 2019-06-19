@@ -21,7 +21,8 @@ for root, dirs, files in os.walk(r'\\HUSSEY_NAS\Hussey Share\Pictures'):
         with open(path, 'rb') as f:
             tags = exifread.process_file(f, details=False)
             try:
-                print(f'{name} take at {tags["EXIF DateTimeOriginal"]}')
+                # print(f'{name} take at {tags["EXIF DateTimeOriginal"]}')
+                tags["EXIF DateTimeOriginal"]
             except KeyError:
                 no_date += 1
                 print(f'*******{name} has no DateTimeOriginal')
